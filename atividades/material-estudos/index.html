@@ -17,10 +17,58 @@
         <p>Os dados normalmente são estruturados em várias tabelas, que podem ser unidas por meio de chave primaria ou chave estrangeira. Esses identificadores únicos demonstram as diferentes relações existentes entre as tabelas e geralmente são ilustrados por meio de diferentes tipos de modelos de dados. Analistas usam consultas SQL para combinar diversos pontos de dados e resumir o desempenho dos negócios, permitindo que as organizações obtenham insights, otimizem fluxos de trabalho e identifiquem novas oportunidades.</p>
         <p>Os bancos de dados relacionais também são tipicamente associados a bancos de dados transacionais, que executam comandos ou transações coletivamente. Um exemplo popular usado para ilustrar isso é uma transferência bancária. Um valor definido é retirado de uma conta e, em seguida, depositado em outra. O valor total do dinheiro é retirado e depositado, e essa transação não pode ocorrer de forma parcial. As transações têm propriedades específicas. Representadas pela sigla ACID, as propriedades ACID são definidas como:</p>
         <ul>
-            <li><b>Atomicidade</b> todas as alterações nos dados são executadas como se fossem uma única operação. Ou seja, todas as alterações são realizadas ou nenhuma delas é.</li>
-            <li>: os dados permanecem em um estado consistente do início ao fim, reforçando a integridade dos dados. </li>
-            <li>Isolamento: o estado intermediário de uma transação não é visível para outras transações, e, como resultado, transações que ocorrem simultaneamente parecem ser serializadas. </li>
-            <li>Durabilidade: após a conclusão bem-sucedida de uma transação, as alterações nos dados persistem e não são desfeitas, mesmo no caso de uma falha do sistema.</li>
+            <li><b>Atomicidade:</b> todas as alterações nos dados são executadas como se fossem uma única operação. Ou seja, todas as alterações são realizadas ou nenhuma delas é.</li>
+            <li><b>Consistencia:</b> os dados permanecem em um estado consistente do início ao fim, reforçando a integridade dos dados. </li>
+            <li><b>Isolamento:</b> o estado intermediário de uma transação não é visível para outras transações, e, como resultado, transações que ocorrem simultaneamente parecem ser serializadas. </li>
+            <li><b>Durabilidade:</b> após a conclusão bem-sucedida de uma transação, as alterações nos dados persistem e não são desfeitas, mesmo no caso de uma falha do sistema.</li>
         </ul>    
+        <h2>Exemplo de Tabela:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>nome</th>
+                    <th>cpf</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Thiago</td>
+                    <td>12345678122</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Dacio</td>
+                    <td>09876543212</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Moreno</td>    
+                    <td>32165487609</td>    
+                </tr>
+            </tbody>
+        </table><br>
+        <h2>Exercícios de fixação</h2>
+        <form title="Exercícios de fixação">
+            <label for="nome">Nome:</label><br>
+            <input type="text" name="nome" id="nome"><br><br>
+            <label>Qual tipo de banco de dados usa dados em tabelas?</label><br>
+            <input type="radio" name="tipo_db" id="relacional">Relacional 
+            <input type="radio" name="tipo_db" id="nao_relacional">Não Relacional<br><br>
+            <label>O que significa a letra A no ACID?</label><br>
+            <select>
+                <option>Atomicidade</option>
+                <option>Autorização</option>
+                <option>Autenticação</option>
+            </select><br><br>
+            <label>Explique com suas palavras o que é uma chave primária: </label><br>
+            <textarea></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+
+        <h2>Referencias</h2>
+        <a href="https://www.ibm.com/br-pt/think/topics/relational-databases" target="_blank">IBM</a><br>
+        <a href="https://www.alura.com.br/artigos/banco-de-dados" target="_blank">Alura</a>
     </body>
 </html>
