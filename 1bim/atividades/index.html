@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1º Bimestre - Atividades | Thiago Chagas</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #0f0f1a;
+            color: #c9d1d9;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #16213e;
+            border-bottom: 3px solid #e94560;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 { color: #e94560; font-size: 2.2rem; }
+        header p  { color: #a8a8b3; margin-top: 8px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .card {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 28px 24px;
+            border: 1px solid #30363d;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #e94560;
+            box-shadow: 0 8px 24px rgba(233, 69, 96, 0.2);
+        }
+
+        .card .icon { font-size: 2.5rem; margin-bottom: 14px; }
+        .card h2   { color: #e94560; font-size: 1.1rem; margin-bottom: 8px; }
+        .card p    { color: #a8a8b3; font-size: 14px; line-height: 1.5; }
+
+        .tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-top: 12px;
+            background: #30363d;
+            color: #58a6ff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #30363d;
+            font-size: 13px;
+            border-top: 1px solid #30363d;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Thiago Chagas — 1º Bimestre</h1>
+    <p>Atividades de Front-end · Selecione uma atividade para abrir</p>
+</header>
+
+<div class="grid">
+
+    <a class="card" href="portifolio/index.html">
+        <div class="icon">🧑‍💻</div>
+        <h2>Portfólio</h2>
+        <p>Página pessoal com apresentação, projetos e formulário de contato.</p>
+        <span class="tag">HTML · CSS</span>
+    </a>
+
+    <a class="card" href="material-estudos/index.html">
+        <div class="icon">📚</div>
+        <h2>Material de Estudos</h2>
+        <p>Site educativo sobre fundamentos de banco de dados, com tabelas e formulário.</p>
+        <span class="tag">HTML</span>
+    </a>
+
+    <a class="card" href="site-multi-paginas/index.html">
+        <div class="icon">🎮</div>
+        <h2>Site Multi-Páginas</h2>
+        <p>GameHub — vitrine de jogos com navegação entre categorias (Ação e Aventura).</p>
+        <span class="tag">HTML · CSS · Multi-página</span>
+    </a>
+
+    <a class="card" href="alteracao-css/index.html">
+        <div class="icon">🎨</div>
+        <h2>Alteração de CSS</h2>
+        <p>Arquivo da Programação — site de fatos tech com estilização por CSS externo.</p>
+        <span class="tag">HTML · CSS externo</span>
+    </a>
+
+    <a class="card" href="caixa-livre/index.html">
+        <div class="icon">🛒</div>
+        <h2>Caixa Livre</h2>
+        <p>Carrinho de compras de periféricos gamer com Bootstrap e JavaScript.</p>
+        <span class="tag">HTML · Bootstrap · JS</span>
+    </a>
+
+    <a class="card" href="pet-virtual/index.html">
+        <div class="icon">🤖</div>
+        <h2>Pet Virtual</h2>
+        <p>RoboTamagochi — pet virtual com barras de status e interação via JavaScript.</p>
+        <span class="tag">HTML · CSS · JS</span>
+    </a>
+
+    <a class="card" href="bootstrap/index.html">
+        <div class="icon">⚡</div>
+        <h2>Bootstrap</h2>
+        <p>Arquivo da Programação estilizado com Bootstrap 5 — layout responsivo.</p>
+        <span class="tag">HTML · Bootstrap 5</span>
+    </a>
+
+</div>
+
+<footer>
+    &copy; 2026 Thiago Chagas · Front-end 1º Bimestre
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>TechStore - Caixa</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <style>
+            .topo {
+                background-color: #e94560;
+                text-align: center;
+                font-size: 42px;
+                font-weight: bold;
+                border: 4px solid #16213e;
+                color: white;
+                padding: 10px;
+            }
+
+            .painel {
+                background: #16213e;
+                color: white;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 2px solid #e94560;
+                border-radius: 6px;
+            }
+
+            .painel label {
+                color: #a8a8b3;
+            }
+
+            body {
+                min-height: 100vh;
+                background-color: #1a1a2e;
+            }
+
+            h3 span {
+                color: white;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="Alert"><br></div>
+
+        <div class="container mt-3">
+
+            <div class="topo">TechStore - Caixa</div>
+
+            <div class="row mt-3">
+
+                <div class="col-md-7">
+                    <h3><span class="badge bg-danger">Sua compra</span></h3>
+                    <ul id="lista" class="list-group"></ul>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="painel">Total: R$ <span id="Total">0.00</span></div>
+
+                    <div class="painel">
+                        <label>Código de Barras</label>
+                        <input type="text" id="cod" class="form-control bg-dark text-white border-secondary" placeholder="Ex: 101, 102, 103">
+                    </div>
+
+                    <div class="painel">
+                        <label>Quantidade</label>
+                        <input type="number" id="qtd" class="form-control bg-dark text-white border-secondary" value="1" min="1">
+                    </div>
+
+                    <div class="painel">
+                        <label>Quantidade x Valor</label>
+                        <div class="alert alert-dark" role="alert">R$ <span id="qtdXun">0.00</span></div>
+                    </div>
+
+                    <button class="btn btn-danger w-100" onclick="addProduto()">
+                        Adicionar Produto
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <script src="script.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
