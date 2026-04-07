@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geolize — App de Estacionamento Inteligente</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#07110a;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:2rem 0 4rem;}
+.pw{display:flex;justify-content:center;padding:1.5rem 0;}
+.phone{width:448px;background:#0f1a14;border-radius:50px;border:8px solid #1a2e20;overflow:hidden;font-family:system-ui,sans-serif;}
+.sbar{background:#0f1a14;padding:14px 28px 6px;display:flex;justify-content:space-between;}
+.sbar span{color:#5a9e72;font-size:15px;font-weight:500;}
+.aheader{background:#0f1a14;padding:11px 22px 14px;display:flex;align-items:center;gap:14px;}
+.alogo{width:42px;height:42px;background:#1d9e75;border-radius:13px;display:flex;align-items:center;justify-content:center;}
+.aname{color:#e8f5ee;font-size:22px;font-weight:500;letter-spacing:0.03em;}
+.vtabs{display:flex;gap:8px;padding:0 17px 14px;}
+.vtab{flex:1;background:#132019;border:1px solid #1d9e75;border-radius:14px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:background 0.15s;}
+.vtab.active{background:#1d9e75;}
+.vtab svg{width:28px;height:28px;}
+.vtab span{font-size:13px;font-weight:500;color:#5dcaa5;}
+.vtab.active span{color:#04342c;}
+.sbar2{background:#132019;border-radius:17px;margin:0 17px 14px;padding:13px 20px;display:flex;align-items:center;gap:10px;border:1px solid #1d4a2e;}
+.sbar2 input{background:transparent;border:none;outline:none;color:#e8f5ee;font-size:18px;flex:1;font-family:system-ui,sans-serif;}
+.sbar2 input::placeholder{color:#2e6645;}
+.sbtn{background:#1d9e75;border:none;border-radius:11px;padding:10px 17px;color:#04342c;font-size:15px;font-weight:500;cursor:pointer;}
+.mapa{position:relative;height:378px;overflow:hidden;}
+.rsvg{position:absolute;inset:0;width:100%;height:100%;}
+.legend{position:absolute;bottom:10px;right:10px;background:rgba(15,26,20,0.92);border-radius:10px;padding:8px 13px;display:flex;flex-direction:column;gap:5px;}
+.li{display:flex;align-items:center;gap:6px;font-size:13px;color:#5dcaa5;}
+.ld{width:10px;height:10px;border-radius:50%;}
+.ipanel{background:#0f1a14;padding:17px 22px;}
+.idle{text-align:center;color:#2e6645;font-size:16px;padding:10px 0;}
+.icard{background:#132019;border-radius:17px;padding:17px 20px;border:1px solid #1d4a2e;}
+.ictitle{color:#5dcaa5;font-size:14px;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;}
+.icmain{color:#e8f5ee;font-size:18px;font-weight:500;margin-bottom:10px;line-height:1.4;}
+.imeta{display:flex;gap:16px;}
+.iml{color:#2e6645;font-size:13px;}
+.imv{color:#e8f5ee;font-size:16px;font-weight:500;}
+.imv.g{color:#1d9e75;}
+.navbtn{width:100%;background:#1d9e75;border:none;border-radius:13px;padding:15px;color:#04342c;font-size:18px;font-weight:500;cursor:pointer;margin-top:13px;}
+.navbtn:active{transform:scale(0.98);}
+.scan-row{display:flex;align-items:center;gap:10px;padding:10px 0;}
+.sdot{width:10px;height:10px;border-radius:50%;background:#1d9e75;animation:pu 1s infinite;}
+@keyframes pu{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.stxt{color:#5dcaa5;font-size:16px;}
+</style>
+</head>
+<body>
+
+<div class="pw">
+ <div class="phone">
+  <div class="sbar"><span>9:41</span><span>●●●●</span></div>
+  <div class="aheader">
+   <div class="alogo">
+    <svg width="24" height="24" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.6"/>
+      <circle cx="9" cy="9" r="2.5" fill="white"/>
+      <line x1="9" y1="2" x2="9" y2="5" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="9" y1="13" x2="9" y2="16" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="2" y1="9" x2="5" y2="9" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="13" y1="9" x2="16" y2="9" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+   </div>
+   <span class="aname">Geolize</span>
+  </div>
+
+  <div class="vtabs">
+   <div class="vtab active" id="tab-car" onclick="selectVehicle('car')">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M5 9l2.5-4h9L19 9" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <rect x="2" y="9" width="20" height="8" rx="2" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="7" cy="19" r="2" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="17" cy="19" r="2" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="9" y1="19" x2="15" y2="19" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+    <span>Carro</span>
+   </div>
+   <div class="vtab" id="tab-van" onclick="selectVehicle('van')">
+    <svg viewBox="0 0 24 24" fill="none">
+      <rect x="2" y="8" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M2 11h12V8H4.5L2 11z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <rect x="14" y="8" width="8" height="10" rx="1" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="6" cy="20" r="2" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="18" cy="20" r="2" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="8" y1="20" x2="16" y2="20" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+    <span>Van</span>
+   </div>
+   <div class="vtab" id="tab-truck" onclick="selectVehicle('truck')">
+    <svg viewBox="0 0 24 24" fill="none">
+      <rect x="1" y="9" width="14" height="9" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M15 12h4l3 3v3h-7V12z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="5" cy="20" r="2" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="19" cy="20" r="2" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="7" y1="20" x2="17" y2="20" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+    <span>Caminhão</span>
+   </div>
+  </div>
+
+  <div class="sbar2">
+   <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+     <circle cx="6.5" cy="6.5" r="4.5" stroke="#2e6645" stroke-width="1.5"/>
+     <path d="M10 10l3 3" stroke="#2e6645" stroke-width="1.5" stroke-linecap="round"/>
+   </svg>
+   <input id="inp" type="text" placeholder="Para onde você vai?" />
+   <button class="sbtn" onclick="buscar()">Buscar</button>
+  </div>
+
+  <div class="mapa">
+   <svg id="msvg" class="rsvg" viewBox="0 0 308 270" xmlns="http://www.w3.org/2000/svg"></svg>
+   <div class="legend">
+    <div class="li"><div class="ld" style="background:#1d9e75"></div><span>vaga disponível</span></div>
+    <div class="li"><div class="ld" style="background:#ef9f27"></div><span>destino</span></div>
+    <div class="li"><div class="ld" style="background:#5dcaa5"></div><span>selecionada</span></div>
+   </div>
+  </div>
+
+  <div class="ipanel">
+   <div class="idle" id="s-idle">Selecione o veículo e digite seu destino</div>
+   <div id="s-scan" style="display:none">
+     <div class="scan-row"><div class="sdot"></div><span class="stxt" id="scan-txt">Localizando vagas disponíveis...</span></div>
+   </div>
+   <div id="s-result" style="display:none">
+    <div class="icard">
+     <div class="ictitle">Vaga mais próxima encontrada</div>
+     <div class="icmain" id="r-name"></div>
+     <div class="imeta">
+      <div><div class="iml">Dist. do destino</div><div class="imv g" id="r-dist"></div></div>
+      <div><div class="iml">Tempo até vaga</div><div class="imv" id="r-time"></div></div>
+      <div><div class="iml">Tipo</div><div class="imv g" id="r-type"></div></div>
+     </div>
+     <button class="navbtn" onclick="navegar()">Iniciar navegação</button>
+    </div>
+   </div>
+   <div id="s-nav" style="display:none">
+    <div class="icard">
+     <div class="ictitle">Navegando</div>
+     <div class="icmain" id="n-main">Siga a rota verde até a vaga</div>
+     <div class="imeta">
+      <div><div class="iml">Chegada estimada</div><div class="imv g" id="n-time"></div></div>
+      <div><div class="iml">Vaga reservada</div><div class="imv g" id="n-vaga"></div></div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<script>
+const W = 308, H = 270;
+const ROAD_W = 13; // meia-largura da rua (rua total = 26px, ~13px por faixa)
+
+// Eixos das ruas (centros)
+const RH = [35, 85, 135, 185, 235]; // Y das ruas horizontais
+const RV = [35, 90, 154, 218, 273]; // X das ruas verticais
+
+// Posição do usuário — sobre a última rua horizontal, no centro vertical
+const USER = { x: 154, y: 238 };
+
+// ─── 10 VAGAS POSSÍVEIS ───────────────────────────────────────────────────────
+// Cada vaga fica na lateral de uma rua (não no cruzamento, não no meio da rua).
+// nearRoad: Y da rua horizontal (para side N/S) ou X da rua vertical (para side E/W).
+// side: N = ao norte (acima) da rua, S = ao sul, E = a leste (direita), W = a oeste.
+const OFFSET = ROAD_W + 8; // distância do centro da rua até o centro da vaga
+
+const ALL_VAGAS = [
+  // Lado norte de ruas horizontais  (y = road - OFFSET)
+  { x: 122, y: 85  - OFFSET, slot: 'A-01', nearRoad: 85,  side: 'N' },
+  { x: 186, y: 85  - OFFSET, slot: 'A-02', nearRoad: 85,  side: 'N' },
+  { x:  62, y: 135 - OFFSET, slot: 'B-01', nearRoad: 135, side: 'N' },
+  { x: 245, y: 135 - OFFSET, slot: 'B-02', nearRoad: 135, side: 'N' },
+  { x: 122, y: 185 - OFFSET, slot: 'C-01', nearRoad: 185, side: 'N' },
+
+  // Lado sul de ruas horizontais  (y = road + OFFSET)
+  { x:  62, y: 85  + OFFSET, slot: 'D-01', nearRoad: 85,  side: 'S' },
+  { x: 245, y: 85  + OFFSET, slot: 'D-02', nearRoad: 85,  side: 'S' },
+  { x: 186, y: 135 + OFFSET, slot: 'E-01', nearRoad: 135, side: 'S' },
+
+  // Lado leste de ruas verticais   (x = road + OFFSET)
+  { x: 90  + OFFSET, y:  60, slot: 'F-01', nearRoad: 90,  side: 'E' },
+
+  // Lado oeste de ruas verticais   (x = road - OFFSET)
+  { x: 218 - OFFSET, y: 160, slot: 'G-01', nearRoad: 218, side: 'W' },
+];
+
+// Seleciona 7 vagas aleatórias a cada carregamento da página
+function sortearVagas() {
+  return [...ALL_VAGAS].sort(() => Math.random() - 0.5).slice(0, 7);
+}
+
+let VAGAS = sortearVagas();
+let vehicle = 'car';
+let selDest = null;
+let selPark = null;
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function selectVehicle(v) {
+  vehicle = v;
+  ['car','van','truck'].forEach(t => {
+    document.getElementById('tab-' + t).className = 'vtab' + (t === v ? ' active' : '');
+  });
+  if (selDest) buscar();
+}
+
+function snapH(y) { return RH.reduce((a, b) => Math.abs(b - y) < Math.abs(a - y) ? b : a); }
+function snapV(x) { return RV.reduce((a, b) => Math.abs(b - x) < Math.abs(a - x) ? b : a); }
+
+function rotaRua(ax, ay, bx, by) {
+  const sy = snapH(ay), ex = snapV(bx), ey = snapH(by), sx = snapV(ax);
+  const pts = [{ x: ax, y: ay }];
+  if (ay !== sy) pts.push({ x: ax, y: sy });
+  if (sx !== ex) pts.push({ x: ex, y: sy });
+  if (sy !== ey) pts.push({ x: ex, y: ey });
+  pts.push({ x: bx, y: by });
+  return pts;
+}
+
+function ptsD(pts) {
+  return pts.map((p, i) => (i === 0 ? `M${p.x} ${p.y}` : `L${p.x} ${p.y}`)).join(' ');
+}
+
+function dist(ax, ay, bx, by) { return Math.sqrt((ax - bx) ** 2 + (ay - by) ** 2); }
+
+function randDestino() {
+  // destino cai em cruzamentos de rua (local válido)
+  const rx = RV[1 + Math.floor(Math.random() * (RV.length - 2))];
+  const ry = RH[Math.floor(Math.random() * (RH.length - 1))];
+  return { x: rx, y: ry };
+}
+
+function vagaMaisProxima(dest) {
+  let best = null, bestD = 99999;
+  VAGAS.forEach(v => {
+    const d = dist(dest.x, dest.y, v.x, v.y);
+    if (d < bestD) { bestD = d; best = v; }
+  });
+  return best;
+}
+
+function mDistancia(px, py) {
+  return Math.round(dist(USER.x, USER.y, px, py) * 1.8) + 'm';
+}
+
+function mTempo(px, py) {
+  const m = Math.round(dist(USER.x, USER.y, px, py) * 1.8);
+  return Math.max(1, Math.round(m / 80)) + ' min';
+}
+
+function parkLabel() {
+  if (vehicle === 'car') return 'Carro';
+  if (vehicle === 'van') return 'Van';
+  return 'Caminhão';
+}
+
+// ─── CRIAÇÃO DE ELEMENTOS SVG ─────────────────────────────────────────────────
+function el(tag, attrs) {
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v));
+  return e;
+}
+
+// ─── DESENHO DO MAPA ──────────────────────────────────────────────────────────
+function desenhar(dest, park, animRoute) {
+  const svg = document.getElementById('msvg');
+  svg.innerHTML = '';
+
+  // — Setas para rotas —
+  const defs = el('defs', {});
+  ['arrowG', 'arrowO'].forEach((id, i) => {
+    const m = el('marker', { id, markerWidth:'7', markerHeight:'7', refX:'5', refY:'3', orient:'auto' });
+    const p = el('polygon', { points:'0 0,6 3,0 6', fill: i === 0 ? '#1d9e75' : '#ef9f27' });
+    m.appendChild(p); defs.appendChild(m);
+  });
+  svg.appendChild(defs);
+
+  // — Fundo (cor dos quarteirões / edificações) —
+  svg.appendChild(el('rect', { width: W, height: H, fill: '#0d1f12' }));
+
+  // — Quarteirões entre ruas (tom ligeiramente diferente para textura) —
+  const yBands = [];
+  for (let i = 0; i < RH.length - 1; i++) yBands.push([RH[i] + ROAD_W, RH[i + 1] - ROAD_W]);
+  const xBands = [];
+  for (let i = 0; i < RV.length - 1; i++) xBands.push([RV[i] + ROAD_W, RV[i + 1] - ROAD_W]);
+
+  yBands.forEach(([y1, y2]) => {
+    xBands.forEach(([x1, x2]) => {
+      svg.appendChild(el('rect', { x: x1, y: y1, width: x2 - x1, height: y2 - y1, fill: '#101d13', rx: '2' }));
+    });
+  });
+
+  // — Ruas horizontais —
+  RH.forEach(y => {
+    // Superfície da rua (duas faixas)
+    svg.appendChild(el('rect', { x: 0, y: y - ROAD_W, width: W, height: ROAD_W * 2, fill: '#1a2e1e' }));
+    // Meio-fio superior e inferior
+    svg.appendChild(el('line', { x1: 0, y1: y - ROAD_W, x2: W, y2: y - ROAD_W, stroke: '#0d1f12', 'stroke-width': '1' }));
+    svg.appendChild(el('line', { x1: 0, y1: y + ROAD_W, x2: W, y2: y + ROAD_W, stroke: '#0d1f12', 'stroke-width': '1' }));
+    // Linha central tracejada (divisória das faixas)
+    svg.appendChild(el('line', { x1: 0, y1: y, x2: W, y2: y, stroke: '#2a5535', 'stroke-width': '0.8', 'stroke-dasharray': '8 5' }));
+  });
+
+  // — Ruas verticais —
+  RV.forEach(x => {
+    // Superfície da rua
+    svg.appendChild(el('rect', { x: x - ROAD_W, y: 0, width: ROAD_W * 2, height: H, fill: '#1a2e1e' }));
+    // Meio-fio esquerdo e direito
+    svg.appendChild(el('line', { x1: x - ROAD_W, y1: 0, x2: x - ROAD_W, y2: H, stroke: '#0d1f12', 'stroke-width': '1' }));
+    svg.appendChild(el('line', { x1: x + ROAD_W, y1: 0, x2: x + ROAD_W, y2: H, stroke: '#0d1f12', 'stroke-width': '1' }));
+    // Linha central tracejada
+    svg.appendChild(el('line', { x1: x, y1: 0, x2: x, y2: H, stroke: '#2a5535', 'stroke-width': '0.8', 'stroke-dasharray': '8 5' }));
+  });
+
+  // — Vagas disponíveis —
+  VAGAS.forEach(v => {
+    const isSel = park && v.slot === park.slot;
+    const color = isSel ? '#5dcaa5' : '#1d9e75';
+
+    // Conector da vaga até a borda da rua (mostra de qual lado é)
+    let cx2 = v.x, cy2 = v.y;
+    if (v.side === 'N') cy2 = v.nearRoad - ROAD_W;
+    else if (v.side === 'S') cy2 = v.nearRoad + ROAD_W;
+    else if (v.side === 'E') cx2 = v.nearRoad + ROAD_W;
+    else if (v.side === 'W') cx2 = v.nearRoad - ROAD_W;
+
+    svg.appendChild(el('line', {
+      x1: v.x, y1: v.y, x2: cx2, y2: cy2,
+      stroke: color, 'stroke-width': '1.5', 'stroke-dasharray': '2 2', opacity: '0.7'
+    }));
+
+    // Círculo da vaga
+    svg.appendChild(el('circle', { cx: v.x, cy: v.y, r: isSel ? 7 : 5.5, fill: color }));
+
+    // Anel de seleção
+    if (isSel) {
+      svg.appendChild(el('circle', { cx: v.x, cy: v.y, r: 12, fill: 'none', stroke: '#5dcaa5', 'stroke-width': '1.5', opacity: '0.4' }));
+    }
+
+    // "P" dentro do círculo
+    const lbl = el('text', {
+      x: v.x, y: v.y + 3.5,
+      'text-anchor': 'middle', fill: '#04342c',
+      'font-size': '7', 'font-weight': '700'
+    });
+    lbl.textContent = 'P';
+    svg.appendChild(lbl);
+  });
+
+  // — Marcador do usuário —
+  svg.appendChild(el('circle', { cx: USER.x, cy: USER.y, r: 12, fill: '#1d9e75', opacity: '0.2' }));
+  svg.appendChild(el('circle', { cx: USER.x, cy: USER.y, r: 7, fill: '#085041' }));
+  svg.appendChild(el('circle', { cx: USER.x, cy: USER.y, r: '3.5', fill: '#5dcaa5' }));
+  const ulbl = el('text', { x: USER.x, y: USER.y + 22, 'text-anchor': 'middle', fill: '#5dcaa5', 'font-size': '9', 'font-weight': '500' });
+  ulbl.textContent = 'Você';
+  svg.appendChild(ulbl);
+
+  if (!dest) return;
+
+  // — Rotas animadas —
+  if (park && animRoute) {
+    const r1 = el('path', {
+      d: ptsD(rotaRua(USER.x, USER.y, park.x, park.y)),
+      stroke: '#1d9e75', 'stroke-width': '3', fill: 'none',
+      'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+      'marker-end': 'url(#arrowG)'
+    });
+    svg.appendChild(r1);
+    try {
+      const len = r1.getTotalLength();
+      r1.setAttribute('stroke-dasharray', len);
+      r1.setAttribute('stroke-dashoffset', len);
+      setTimeout(() => { r1.style.transition = 'stroke-dashoffset 1.3s ease'; r1.setAttribute('stroke-dashoffset', '0'); }, 50);
+    } catch(e) {}
+
+    const r2 = el('path', {
+      d: ptsD(rotaRua(park.x, park.y, dest.x, dest.y)),
+      stroke: '#ef9f27', 'stroke-width': '2', fill: 'none',
+      'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-dasharray': '5 4'
+    });
+    svg.appendChild(r2);
+  }
+
+  // — Marcador de destino —
+  svg.appendChild(el('circle', { cx: dest.x, cy: dest.y, r: 9, fill: '#ef9f27' }));
+  const dt = el('text', { x: dest.x, y: dest.y + 4, 'text-anchor': 'middle', fill: '#412402', 'font-size': '9', 'font-weight': '700' });
+  dt.textContent = 'D';
+  svg.appendChild(dt);
+  const dlbl = el('text', { x: dest.x, y: dest.y - 13, 'text-anchor': 'middle', fill: '#ef9f27', 'font-size': '9', 'font-weight': '500' });
+  dlbl.textContent = 'Destino';
+  svg.appendChild(dlbl);
+
+  // — Marcador especial da vaga selecionada —
+  if (park) {
+    svg.appendChild(el('rect', { x: park.x - 9, y: park.y - 9, width: 18, height: 18, fill: '#085041', rx: '4', stroke: '#5dcaa5', 'stroke-width': '1.2' }));
+    const pt = el('text', { x: park.x, y: park.y + 5, 'text-anchor': 'middle', fill: '#9fe1cb', 'font-size': '11', 'font-weight': '700' });
+    pt.textContent = 'P';
+    svg.appendChild(pt);
+    const plbl = el('text', { x: park.x, y: park.y - 13, 'text-anchor': 'middle', fill: '#5dcaa5', 'font-size': '9', 'font-weight': '500' });
+    plbl.textContent = park.slot;
+    svg.appendChild(plbl);
+  }
+}
+
+// ─── CONTROLE DE ESTADOS ──────────────────────────────────────────────────────
+function show(id) {
+  ['s-idle','s-scan','s-result','s-nav'].forEach(i => {
+    document.getElementById(i).style.display = i === id ? '' : 'none';
+  });
+}
+
+function buscar() {
+  const val = document.getElementById('inp').value.trim();
+  if (!val) return;
+  const dest = randDestino();
+  selDest = dest; selPark = null;
+  desenhar(dest, null, false);
+  const msgs = ['Localizando vagas disponíveis...', 'Calculando melhor rota...', 'Verificando sensores...'];
+  document.getElementById('scan-txt').textContent = msgs[Math.floor(Math.random() * msgs.length)];
+  show('s-scan');
+  setTimeout(() => {
+    const park = vagaMaisProxima(dest);
+    selPark = park;
+    desenhar(dest, park, true);
+    document.getElementById('r-name').textContent = 'Vaga ' + park.slot + ' — ' + val;
+    document.getElementById('r-dist').textContent = mDistancia(park.x, park.y);
+    document.getElementById('r-time').textContent = mTempo(park.x, park.y);
+    document.getElementById('r-type').textContent = parkLabel();
+    show('s-result');
+  }, 1800);
+}
+
+function navegar() {
+  if (!selPark) return;
+  document.getElementById('n-time').textContent = mTempo(selPark.x, selPark.y);
+  document.getElementById('n-vaga').textContent = selPark.slot;
+  show('s-nav');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+desenhar(null, null, false);
+document.getElementById('inp').addEventListener('keydown', e => { if (e.key === 'Enter') buscar(); });
+</script>
+</body>
+</html>
