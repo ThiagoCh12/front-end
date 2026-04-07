@@ -1,0 +1,114 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+h1 {
+    color: #e94560;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+#status-texto {
+    color: #a8a8b3;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+#pet {
+    font-size: 10rem;
+    margin: 20px;
+    transition: transform 0.3s;
+    cursor: default;
+    user-select: none;
+}
+
+#pet:hover { transform: scale(1.05); }
+
+#barra-container {
+    width: 300px;
+    margin: 10px 0;
+}
+
+.barra-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: #a8a8b3;
+}
+
+.barra {
+    width: 100%;
+    height: 16px;
+    background: #30363d;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.barra-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.5s ease;
+}
+
+#barra-fome-fill    { background: #e94560; }
+#barra-humor-fill   { background: #58a6ff; }
+#barra-energia-fill { background: #3fb950; }
+
+.botoes {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    background: #e94560;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+button:hover  { background: #c73652; transform: scale(1.05); }
+button:active { transform: scale(0.97); }
+
+button.azul       { background: #58a6ff; }
+button.azul:hover { background: #388bfd; }
+
+button.verde       { background: #3fb950; }
+button.verde:hover { background: #2ea043; }
+
+button:disabled {
+    background: #30363d;
+    color: #a8a8b3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#msg {
+    margin-top: 15px;
+    font-size: 15px;
+    color: #58a6ff;
+    height: 20px;
+}
+
+#timer {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #a8a8b3;
+}

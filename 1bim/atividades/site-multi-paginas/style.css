@@ -1,0 +1,105 @@
+/* ===== GERAL ===== */
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #1a1a14;
+    color: white;
+}
+
+/* ===== NAV ===== */
+nav {
+    font-size: 20px;
+    background-color: #111109;
+    padding: 15px 20px;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 100px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #c8a84b;
+}
+
+/* ===== BANNER (index) ===== */
+.banner {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* ===== TÍTULOS ===== */
+h1 {
+    text-align: center;
+    color: #c8a84b;
+    margin: 40px 0 20px;
+}
+
+.banner h1 {
+    font-size: 3rem;
+    margin: 0 0 10px;
+}
+
+.banner p {
+    color: #a8a89a;
+    font-size: 1.2rem;
+}
+
+/* ===== CARDS DE ARMAS ===== */
+.espacoarmas {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 20px 40px 40px;
+}
+
+.arma {
+    background-color: #2a2a1e;
+    border-radius: 10px;
+    width: 260px;
+    text-align: center;
+    border: 2px solid #c8a84b;
+    overflow: hidden;
+}
+
+.arma-img {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    background-color: #1a1a10;
+    padding: 16px;
+}
+
+.arma-info {
+    padding: 16px;
+}
+
+.arma h3 {
+    color: #c8a84b;
+    margin: 0 0 6px;
+    font-size: 1.1rem;
+}
+
+.arma .origem {
+    font-size: 12px;
+    color: #a8a89a;
+    margin-bottom: 10px;
+}
+
+.arma p {
+    font-size: 13px;
+    color: #d0d0c0;
+    line-height: 1.5;
+}
