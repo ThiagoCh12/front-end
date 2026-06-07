@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álbum da Copa 2026 - Jogadores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="cabecalho">
+        <h1>Figurinhas dos Jogadores</h1>
+        <p>Adicione novos craques ao álbum</p>
+    </header>
+
+    <!-- Questão 4: container com o card já disposto. add() insere o novo ao lado. -->
+    <main id="container-album" class="container-album">
+
+        <div class="jogador-card">
+            <img src="img/_vinicius_junior.png" alt="Vinícius Júnior" class="jogador-foto">
+            <h3 class="jogador-nome">Vinícius Júnior</h3>
+            <ul class="jogador-info">
+                <li>📅 <strong>Nascimento:</strong> <span>12/07/2000 (25 anos)</span></li>
+                <li>📏 <strong>Altura:</strong> <span>1,76 m</span></li>
+                <li>🏃 <strong>Posição:</strong> <span>Atacante</span></li>
+                <li>⭐ <strong>Rank:</strong> <span>9,2</span></li>
+            </ul>
+        </div>
+
+    </main>
+
+    <div class="area-botao">
+        <button class="btn" onclick="add()">Adicionar Novo Jogador</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
