@@ -3,37 +3,106 @@ import Keyboard from "./components/Keyboard";
 import Board from "./components/Board";
 import "./App.css";
 
-const [gameOver, setGameOver] = useState(false);
-const [winner, setWinner] = useState(false);
-
 const SECRET_WORD = "casal";
+const ROWS = 6;
+const COLS = 5;
 
-const initialBoard = Array.from({ length: 6 }, () =>
-  Array.from({ length: 5 }, () => ({
-    letter: "",
-    status: ""
-  }))
-);
+function createEmptyBoard() {
+  return Array.from({ length: ROWS }, () =>
+    Array.from({ length: COLS }, () => ({ letter: "", status: "" }))
+  );
+}
 
+// cópia profunda do tabuleiro para atualizar o estado sem mutar o anterior
+function cloneBoard(board) {
+  return board.map((row) => row.map((cell) => ({ ...cell })));
+}
 
 export default function App() {
-  const [board, setBoard] = useState(initialBoard);
+  const [board, setBoard] = useState(createEmptyBoard);
   const [currentRow, setCurrentRow] = useState(0);
   const [currentCol, setCurrentCol] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [winner, setWinner] = useState(false);
 
   function handleLetter(letter) {
-    if (gameOver) return;
-    if (currentCol >= 5) return;
+    if (gameOver || currentCol >= COLS) return;
 
-    const newBoard = [...board];
-
-    newBoard[currentRow][currentCol] = {
-      letter,
-      status: ""
-    };
+    const newBoard = cloneBoard(board);
+    newBoard[currentRow][currentCol] = { letter, status: "" };
 
     setBoard(newBoard);
     setCurrentCol(currentCol + 1);
+  }
+
+  function handleBackspace() {
+    if (gameOver || currentCol === 0) return;
+
+    const newBoard = cloneBoard(board);
+    newBoard[currentRow][currentCol - 1] = { letter: "", status: "" };
+
+    setBoard(newBoard);
+    setCurrentCol(currentCol - 1);
+  }
+
+  function checkWord(word) {
+    const result = [];
+    for (let i = 0; i < COLS; i++) {
+      if (word[i] === SECRET_WORD[i]) {
+        result.push("correct"); // verde
+      } else if (SECRET_WORD.includes(word[i])) {
+        result.push("present"); // amarelo
+      } else {
+        result.push("absent"); // cinza
+      }
+    }
+    return result;
+  }
+
+  function handleEnter() {
+    if (gameOver || currentCol < COLS) return;
+
+    const word = board[currentRow]
+      .map((c) => c.letter)
+      .join("")
+      .toLowerCase();
+
+    const result = checkWord(word);
+
+    const newBoard = cloneBoard(board);
+    for (let i = 0; i < COLS; i++) {
+      newBoard[currentRow][i].status = result[i];
+    }
+    setBoard(newBoard);
+
+    if (word === SECRET_WORD) {
+      setWinner(true);
+      setGameOver(true);
+      return;
+    }
+
+    if (currentRow === ROWS - 1) {
+      setGameOver(true);
+      return;
+    }
+
+    setCurrentRow(currentRow + 1);
+    setCurrentCol(0);
+  }
+
+  function handleVirtualKey(key) {
+    if (gameOver) return;
+    if (key === "enter") return handleEnter();
+    if (key === "back") return handleBackspace();
+    handleLetter(key);
+  }
+
+  function resetGame() {
+    setBoard(createEmptyBoard());
+    setCurrentRow(0);
+    setCurrentCol(0);
+    setGameOver(false);
+    setWinner(false);
   }
 
   useEffect(() => {
@@ -44,23 +113,16 @@ export default function App() {
 
       if (/^[a-z]$/.test(key)) {
         handleLetter(key);
-      }
-
-      if (key === "backspace") {
+      } else if (key === "backspace") {
         handleBackspace();
-      }
-
-      if (key === "enter") {
+      } else if (key === "enter") {
         handleEnter();
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [currentRow, currentCol, board]);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentRow, currentCol, board, gameOver]);
 
   return (
     <main>
@@ -68,92 +130,15 @@ export default function App() {
 
       <Board board={board} />
       <Keyboard onKeyPress={handleVirtualKey} />
+
       {gameOver && (
         <div className="result">
-          {winner ? "🎉 Você venceu!" : "❌ Você perdeu!"}
-          <button onCLick={resetGame}>
-            Jogar novamente
-          </button>
-        
+          {winner
+            ? "🎉 Você venceu!"
+            : `❌ Você perdeu! A palavra era "${SECRET_WORD.toUpperCase()}".`}
+          <button onClick={resetGame}>Jogar novamente</button>
         </div>
       )}
     </main>
   );
-}
-
-function checkWord(word) {
-  const result = [];
-
-  for (let i = 0; i < 5; i++) {
-    if (word[i] === SECRET_WORD[i]) {
-      result.push("correct"); // verde
-    } else if (SECRET_WORD.includes(word[i])) {
-      result.push("present"); // amarelo
-    } else {
-      result.push("absent"); // cinza
-    }
-  }
-
-  return result;
-}
-
-function handleBackspace() {
-  if (currentCol === 0) return;
-
-  const newBoard = [...board];
-  newBoard[currentRow][currentCol - 1] = "";
-
-  setBoard(newBoard);
-  setCurrentCol(currentCol - 1);
-}
-
-function handleEnter() {
-  if (gameOver) return;
-  if (currentCol < 5) return;
-
-  const word = board[currentRow]
-    .map((c) => c.letter)
-    .join("")
-    .toLowerCase();
-
-  const result = checkWord(word);
-
-  const newBoard = [...board];
-
-  for (let i = 0; i < 5; i++) {
-    newBoard[currentRow][i].status = result[i];
-  }
-
-  setBoard(newBoard);
-    const isWinner = word === SECRET_WORD;
-
-  if (isWinner) {
-    setWinner(true);
-    setGameOver(true);
-    return;
-  }
-    if (currentRow === 5) {
-    setGameOver(true);
-    return;
-  }
-
-  setCurrentRow(currentRow + 1);
-  setCurrentCol(0);
-}
-
-function handleVirtualKey(key) {
-  if (gameOver) return;
-
-  if (key === "enter") return handleEnter();
-  if (key === "back") return handleBackspace();
-
-  handleLetter(key);
-}
-
-function resetGame() {
-  setBoard(initialBoard);
-  setCurrentRow(0);
-  setCurrentCol(0);
-  setGameOver(false);
-  setWinner(false);
 }
