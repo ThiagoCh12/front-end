@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Keyboard from "./components/Keyboard";
 import Board from "./components/Board";
 import "./App.css";
@@ -18,6 +18,20 @@ function cloneBoard(board) {
   return board.map((row) => row.map((cell) => ({ ...cell })));
 }
 
+function checkWord(word) {
+  const result = [];
+  for (let i = 0; i < COLS; i++) {
+    if (word[i] === SECRET_WORD[i]) {
+      result.push("correct"); // verde
+    } else if (SECRET_WORD.includes(word[i])) {
+      result.push("present"); // amarelo
+    } else {
+      result.push("absent"); // cinza
+    }
+  }
+  return result;
+}
+
 export default function App() {
   const [board, setBoard] = useState(createEmptyBoard);
   const [currentRow, setCurrentRow] = useState(0);
@@ -25,7 +39,13 @@ export default function App() {
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(false);
 
+  // Mantém o estado mais recente acessível ao listener global,
+  // que é registrado UMA única vez (evita teclas duplicadas).
+  const stateRef = useRef({});
+  stateRef.current = { board, currentRow, currentCol, gameOver };
+
   function handleLetter(letter) {
+    const { board, currentRow, currentCol, gameOver } = stateRef.current;
     if (gameOver || currentCol >= COLS) return;
 
     const newBoard = cloneBoard(board);
@@ -36,6 +56,7 @@ export default function App() {
   }
 
   function handleBackspace() {
+    const { board, currentRow, currentCol, gameOver } = stateRef.current;
     if (gameOver || currentCol === 0) return;
 
     const newBoard = cloneBoard(board);
@@ -45,21 +66,8 @@ export default function App() {
     setCurrentCol(currentCol - 1);
   }
 
-  function checkWord(word) {
-    const result = [];
-    for (let i = 0; i < COLS; i++) {
-      if (word[i] === SECRET_WORD[i]) {
-        result.push("correct"); // verde
-      } else if (SECRET_WORD.includes(word[i])) {
-        result.push("present"); // amarelo
-      } else {
-        result.push("absent"); // cinza
-      }
-    }
-    return result;
-  }
-
   function handleEnter() {
+    const { board, currentRow, currentCol, gameOver } = stateRef.current;
     if (gameOver || currentCol < COLS) return;
 
     const word = board[currentRow]
@@ -91,7 +99,6 @@ export default function App() {
   }
 
   function handleVirtualKey(key) {
-    if (gameOver) return;
     if (key === "enter") return handleEnter();
     if (key === "back") return handleBackspace();
     handleLetter(key);
@@ -105,9 +112,10 @@ export default function App() {
     setWinner(false);
   }
 
+  // Listener do teclado físico: registrado UMA vez (deps vazias).
   useEffect(() => {
     function handleKeyDown(event) {
-      if (gameOver) return;
+      if (event.repeat) return; // ignora auto-repeat ao segurar a tecla
 
       const key = event.key.toLowerCase();
 
@@ -122,7 +130,8 @@ export default function App() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentRow, currentCol, board, gameOver]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <main>
